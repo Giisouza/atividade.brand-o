@@ -108,6 +108,16 @@ var efetuando_insert = false;
 
 // iniciando a "escuta" de dispositivos Arduino
 iniciar_escuta();
+
+// dados aleatórios: 3 linhas abaixo:
 setInterval(function() {
-	registrar_leitura(Math.random()*100, Math.random()*200)
+	registrar_leitura(Math.min(Math.random()*100, 60), Math.min(Math.random()*200, 100))
 }, 5000);
+
+// abrir a pasta deste arquivo via git bash e executar:
+// npm i
+// npm start
+// vai mostrar uma mensagem de erro de placa arduino 
+// mas depois vai começar a registrar os dados
+// depois ficar acessar e atualizando o endereço 
+// ...../leituras/ultimas e ver se mostra novos valores
