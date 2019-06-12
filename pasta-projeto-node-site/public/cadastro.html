@@ -62,6 +62,8 @@
 
     </style>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+
 </head>
 
 <body>
@@ -72,21 +74,21 @@
 
         <form class="formulario" id="form" method="POST" onsubmit="return cadastrar()">
 
-            <h4>Nome Completo:</h4><input type="text" name="nomeCompleto" placeholder="Insira seu Nome Completo" required minlength="4"><br>
+            <h4>Nome Completo:</h4><input type="text" name="nomeCompleto" placeholder="Insira seu Nome Completo"
+                required minlength="4"><br>
 
             <h4>Telefone:</h4><input type="number" name="telefone" placeholder="Insira seu Telefone" required minlength="9"><br>
 
-            <h4>Email:</h4><input type="text" name="email" onblur="validacaoEmail(f1.email)"  maxlength="60" size='65'placeholder="Insira seu E-mail ">
+            <h4>Email:</h4><input type="email" name="email" maxlength="60" size='65' placeholder="Insira seu E-mail" required>
 
             <h4>Senha:</h4><input type="password" name="senha" placeholder="Insira sua Senha" required minlength="4"><br>
 
-            <button >Cadastrar</button>
+            <button>Cadastrar</button>
 
             Já obtem obtem cadastro?
             <a href="login.html">Logar!</a><br><br>
 
             <div id="caixa2"></div>
-            <div id="msgemail"></div>
 
         </form>
 
@@ -98,39 +100,28 @@
 
 <script>
 
- function cadastrar() {
-
-    function validacaoEmail(field) {
-        usuario = field.value.substring(0, field.value.indexOf("@"));
-        dominio = field.value.substring(field.value.indexOf("@") + 1, field.value.length);
-
-        if ((usuario.length >= 1) &&
-            (dominio.length >= 3) &&
-            (usuario.search("@") == -1) &&
-            (dominio.search("@") == -1) &&
-            (usuario.search(" ") == -1) &&
-            (dominio.search(" ") == -1) &&
-            (dominio.search(".") != -1) &&
-            (dominio.indexOf(".") >= 1) &&
-            (dominio.lastIndexOf(".") < dominio.length - 1)) {
-            document.getElementById("msgemail").innerHTML = "E-mail válido";
-            alert("E-mail valido");
-        }
-        else {
-            document.getElementById("msgemail").innerHTML = "<font color='red'>E-mail inválido </font>";
-            alert("E-mail invalido");
-        }
-    }
+    function cadastrar() {
 
         var formulario = new URLSearchParams(new FormData(form));
         fetch("/usuarios/cadastrar", {
             method: "POST",
             body: formulario
         }).then(function (response) {
-            
+
             if (response.ok) {
 
-                window.location.href='login.html';
+                Swal.fire({
+                    position: 'top-end',
+                    type: 'success',
+                    title: 'Cadastro Efetuado com Sucesso!',
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(function (){
+
+                    window.location.href = 'login.html';
+                });
+
+                
 
             } else {
 
@@ -138,13 +129,34 @@
                 response.text().then(function (resposta) {
                     div_erro.innerHTML = resposta;
                 });
-               
+
             }
         });
 
+
+
         return false;
 
+
+
     }
-    
+
+    function validacaoEmail(field) {
+        usuario = field.value.substring(0, field.value.indexOf("@"));
+        dominio = field.value.substring(field.value.indexOf("@") + 1, field.value.length);
+
+        if (email.value >= '' || email.value.indexOf(".") || email.value.indexOf("@")) {
+            // Swal.fire(
+            //     'E-mail Valido!'
+            // )
+        }
+        else {
+            Swal.fire(
+                'E-mail inválido!'
+            )
+        }
+
+    }
+
 
 </script>
