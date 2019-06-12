@@ -76,7 +76,7 @@
 
             <h4>Telefone:</h4><input type="number" name="telefone" placeholder="Insira seu Telefone" required minlength="9"><br>
 
-            <h4>Email:</h4><input type="email" name="email" placeholder="Insira seu E-mail" minlength="10"><br>
+            <h4>Email:</h4><input type="text" name="email" onblur="validacaoEmail(f1.email)"  maxlength="60" size='65'placeholder="Insira seu E-mail ">
 
             <h4>Senha:</h4><input type="password" name="senha" placeholder="Insira sua Senha" required minlength="4"><br>
 
@@ -86,6 +86,7 @@
             <a href="login.html">Logar!</a><br><br>
 
             <div id="caixa2"></div>
+            <div id="msgemail"></div>
 
         </form>
 
@@ -99,12 +100,28 @@
 
  function cadastrar() {
 
-    if(email.value == undefined){
+    function validacaoEmail(field) {
+        usuario = field.value.substring(0, field.value.indexOf("@"));
+        dominio = field.value.substring(field.value.indexOf("@") + 1, field.value.length);
 
-        alert('Erro, Email Invalido!');
-
+        if ((usuario.length >= 1) &&
+            (dominio.length >= 3) &&
+            (usuario.search("@") == -1) &&
+            (dominio.search("@") == -1) &&
+            (usuario.search(" ") == -1) &&
+            (dominio.search(" ") == -1) &&
+            (dominio.search(".") != -1) &&
+            (dominio.indexOf(".") >= 1) &&
+            (dominio.lastIndexOf(".") < dominio.length - 1)) {
+            document.getElementById("msgemail").innerHTML = "E-mail válido";
+            alert("E-mail valido");
+        }
+        else {
+            document.getElementById("msgemail").innerHTML = "<font color='red'>E-mail inválido </font>";
+            alert("E-mail invalido");
+        }
     }
-    else{
+
         var formulario = new URLSearchParams(new FormData(form));
         fetch("/usuarios/cadastrar", {
             method: "POST",
@@ -128,6 +145,6 @@
         return false;
 
     }
-    }
+    
 
 </script>
